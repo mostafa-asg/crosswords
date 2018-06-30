@@ -2,7 +2,7 @@ package com.github
 
 import scala.collection.mutable
 
-case class Crosswords(width: Int, height: Int, placeholders: List[Placeholder]) {
+case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
 
   private val intersections = new mutable.ListBuffer[Intersection]
 
@@ -11,16 +11,16 @@ case class Crosswords(width: Int, height: Int, placeholders: List[Placeholder]) 
     intersections += Intersection( intersection.to, intersection.from )
   }
 
-  def getIntersectionBetween(placeholderId1: String, placeholderId2: String): Option[Intersection] = {
+  private def getIntersectionBetween(placeholderId1: String, placeholderId2: String): Option[Intersection] = {
     intersections.find( x => x.from.placeholderId.equals(placeholderId1) &&
                              x.to.placeholderId.equals(placeholderId2))
   }
 
-  def getIntersectionsFor(placeholderId: String): List[Intersection] = {
+  private def getIntersectionsFor(placeholderId: String): List[Intersection] = {
     intersections.filter( x => x.from.placeholderId == placeholderId ).toList
   }
 
-  def getPlaceholderById(id: String): Placeholder = placeholders.find( x => x.id.equals(id) ).get
+  private def getPlaceholderById(id: String): Placeholder = placeholders.find( x => x.id.equals(id) ).get
 
   private lazy val pruneCandidateValues: List[Placeholder] = {
     placeholders.map( placeholder => pruneCandidateValues(placeholder, getIntersectionsFor(placeholder.id)) )
@@ -73,14 +73,14 @@ case class Crosswords(width: Int, height: Int, placeholders: List[Placeholder]) 
     result.toList
   }
 
-  def isValidSolution(placeholders: List[Placeholder]): Boolean ={
+  private def isValidSolution(placeholders: List[Placeholder]): Boolean ={
     val list = placeholders.zipWithIndex.map( x => (x._1 , placeholders.drop(x._2+1)) )
     val booleans = list.flatMap(x => x._2.map(pl => isSatisfyIntersection(x._1, pl)))
 
     booleans.forall(_ == true)
   }
 
-  def isSatisfyIntersection(placeholder1: Placeholder, placeholder2: Placeholder): Boolean = {
+  private def isSatisfyIntersection(placeholder1: Placeholder, placeholder2: Placeholder): Boolean = {
     getIntersectionBetween( placeholder1.id , placeholder2.id ) match {
       case None => true
       case Some(intersection) =>
@@ -90,10 +90,10 @@ case class Crosswords(width: Int, height: Int, placeholders: List[Placeholder]) 
 
   def render(): Unit = {
 
-    val table = Array.fill(width,height)('+')
+    val table = Array.fill(rows,cols)('+')
 
     placeholders.foreach { placeholder =>
-      val pos = placeholder.position
+      val pos = placeholder.startPosition
       val value = placeholder.currentValue
 
       def getValue(index: Int): Char = value match {
