@@ -10,6 +10,8 @@ case class Placeholder(id: String,
                        currentValue: Option[String] = None,
                       ) {
 
+  require(id.nonEmpty, "You must provide an identifier for this placeholder")
+  require(size > 0, "Size must be positive")
   require(candidateValues.forall(_.length == size), s"these words are not perfect candidate ${candidateValues.filter(_.length != size)}")
 
   lazy val allPossibilities: List[Placeholder] = {
