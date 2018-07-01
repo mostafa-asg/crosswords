@@ -4,7 +4,7 @@ import org.scalatest.FlatSpec
 
 class CrosswordsBuilderSpec extends FlatSpec {
 
-  import CrosswordsBuilderSpec._
+  import StringUtil._
 
   "test 1" should "build crosswords from string representation" in {
 
@@ -109,16 +109,4 @@ class CrosswordsBuilderSpec extends FlatSpec {
     assert( crosswords.solveAllPossibilities.size == 1 )
   }
 
-}
-
-object CrosswordsBuilderSpec {
-  implicit class StringOps(input: String) {
-
-    def times(number: Int): String = {
-      val builder = new StringBuilder
-      (1 to number).foreach( _ => builder.append(input) )
-      builder.toString()
-    }
-
-  }
 }
