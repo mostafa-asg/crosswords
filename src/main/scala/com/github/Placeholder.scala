@@ -18,7 +18,7 @@ case class Placeholder(id: String,
     candidateValues.toList.map(candidate => copy(currentValue = Some(candidate)))
   }
 
-  val getPositionPoints: List[Point] = {
+  lazy val getPositionPoints: List[Point] = {
     val positions = List.fill[Point](size)(startPosition)
 
     direction match {
@@ -45,5 +45,25 @@ case class Placeholder(id: String,
   }
 
   def pointToIndex(point: Point): Option[Int] = getPositionPoints.zipWithIndex.find(x => x._1.equals(point)).flatMap(tuple => Some(tuple._2))
+
+}
+
+object Placeholder {
+
+  def horizontal(id: String,
+                 size: Int,
+                 startPosition: Point = Point(0,0),
+                 candidateValues: Set[String] = Set.empty,
+                 currentValue: Option[String] = None): Placeholder = {
+    Placeholder(id, size, Direction.Horizontal, startPosition, candidateValues, currentValue)
+  }
+
+  def vertical(id: String,
+               size: Int,
+               startPosition: Point = Point(0,0),
+               candidateValues: Set[String] = Set.empty,
+               currentValue: Option[String] = None): Placeholder = {
+    Placeholder(id, size, Direction.Vertical, startPosition, candidateValues, currentValue)
+  }
 
 }
