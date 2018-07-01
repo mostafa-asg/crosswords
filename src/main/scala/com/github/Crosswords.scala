@@ -88,7 +88,7 @@ case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
     }
   }
 
-  def render(): Unit = {
+  val render: String = {
 
     val table = Array.fill(rows,cols)('+')
 
@@ -113,10 +113,13 @@ case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
       }
     }
 
+    val result = new mutable.StringBuilder(rows * cols)
     table.foreach{ row =>
-      row.foreach(print(_))
-      println()
+      row.foreach(result.append)
+      result.append(System.lineSeparator())
     }
+
+    result.toString()
   }
 
 }
