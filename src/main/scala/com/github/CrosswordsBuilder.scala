@@ -87,6 +87,17 @@ object CrosswordsBuilder {
     var index = 0
     var foundPlaceholder = false
 
+    def addPlaceHolder() = {
+      val (id, position) = direction match {
+        case Direction.Vertical => (s"V$index-$number", Point(index, number)) // number is column number , index is row number
+        case Direction.Horizontal => (s"H$number-$index", Point(number, index)) //number is row number, index is column number
+      }
+      placeholders += Placeholder(id, size, direction, startPosition = position)
+    }
+
+    if (data.startsWith("+++"))
+      1
+
     data.zipWithIndex.foreach { ch =>
       if (ch._1 == '-' && !foundPlaceholder){
         index = ch._2
@@ -95,12 +106,17 @@ object CrosswordsBuilder {
         size = ch._2 - index
         foundPlaceholder = false
         if (size > 1) {
-          val (id, position) = direction match {
-            case Direction.Vertical => (s"V$index-$number", Point(index, number)) // number is column number , index is row number
-            case Direction.Horizontal => (s"H$number-$index", Point(number, index)) //number is row number, index is column number
-          }
-          placeholders += Placeholder(id, size, direction, startPosition = position)
+          addPlaceHolder()
         }
+      }
+    }
+
+    // for placeholder that continues to reach the crosswords border
+    // so there is no + after -, we have reached the end of data
+    if (foundPlaceholder){
+      size = data.length - index
+      if (size > 0){
+        addPlaceHolder()
       }
     }
 
