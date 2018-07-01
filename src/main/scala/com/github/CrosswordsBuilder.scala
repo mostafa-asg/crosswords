@@ -96,8 +96,8 @@ object CrosswordsBuilder {
         foundPlaceholder = false
         if (size > 1) {
           val (id, position) = direction match {
-            case Direction.Vertical => (s"C$index-$number", Point(index, number)) // number is column number , index is row number
-            case Direction.Horizontal => (s"R$number-$index", Point(number, index)) //number is row number, index is column number
+            case Direction.Vertical => (s"V$index-$number", Point(index, number)) // number is column number , index is row number
+            case Direction.Horizontal => (s"H$number-$index", Point(number, index)) //number is row number, index is column number
           }
           placeholders += Placeholder(id, size, direction, startPosition = position)
         }
