@@ -95,9 +95,6 @@ object CrosswordsBuilder {
       placeholders += Placeholder(id, size, direction, startPosition = position)
     }
 
-    if (data.startsWith("+++"))
-      1
-
     data.zipWithIndex.foreach { ch =>
       if (ch._1 == '-' && !foundPlaceholder){
         index = ch._2
