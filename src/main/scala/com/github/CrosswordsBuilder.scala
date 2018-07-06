@@ -5,6 +5,12 @@ import scala.collection.mutable
 
 object CrosswordsBuilder {
 
+  /**
+    * Build a crosswords form a string representation
+    * @param crosswordsInString
+    * @param words a set of words to used
+    * @return
+    */
   def buildFrom(crosswordsInString: String, words: Set[String]): Crosswords = {
 
     val rows = crosswordsInString.split("\n")

@@ -2,6 +2,13 @@ package com.github
 
 import scala.collection.mutable
 
+/**
+  * Crosswords is a rows * cols table holding all placeholders
+  * It can solve all the solution and can render the crosswords
+  * @param rows number of rows
+  * @param cols number of columns
+  * @param placeholders list of placeholders in this crosswords
+  */
 case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
 
   private val intersections = new mutable.ListBuffer[Intersection]
@@ -11,21 +18,36 @@ case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
     intersections += Intersection( intersection.to, intersection.from )
   }
 
+  /**
+    * If there is any intersection defined between two placeholders, it returns Some(intersection)
+    * Otherwise returns None
+    */
   private def getIntersectionBetween(placeholderId1: String, placeholderId2: String): Option[Intersection] = {
     intersections.find( x => x.from.placeholderId.equals(placeholderId1) &&
                              x.to.placeholderId.equals(placeholderId2))
   }
 
+  /**
+    * Returns all intersections for a given placeholder
+    */
   private def getIntersectionsFor(placeholderId: String): List[Intersection] = {
     intersections.filter( x => x.from.placeholderId == placeholderId ).toList
   }
 
   private def getPlaceholderById(id: String): Placeholder = placeholders.find( x => x.id.equals(id) ).get
 
+  /**
+    * Prune all placeholders candidate values
+    */
   private lazy val pruneCandidateValues: List[Placeholder] = {
     placeholders.map( placeholder => pruneCandidateValues(placeholder, getIntersectionsFor(placeholder.id)) )
   }
 
+  /**
+    * Prune candidate values for a given placeholder based on defined intersections for this placeholder
+    * It removes unnecessary candidate values that are impossible as a placeholder value
+    * @return new placeholder with prune candidate values
+    */
   private def pruneCandidateValues(placeholder: Placeholder, intersections: List[Intersection]): Placeholder = {
     var thisCandidateValues = placeholder.candidateValues
 
@@ -47,6 +69,9 @@ case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
     placeholder.copy(candidateValues = thisCandidateValues)
   }
 
+  /**
+    * Solve all possible solutions and returns all solved crosswords
+    */
   lazy val solveAllPossibilities: List[Crosswords] = {
 
     val all = pruneCandidateValues.map(_.allPossibilities)
@@ -88,6 +113,9 @@ case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
     }
   }
 
+  /**
+    * Draw the crosswords and returns representation as string
+    */
   val render: String = {
 
     val table = Array.fill(rows,cols)('+')
