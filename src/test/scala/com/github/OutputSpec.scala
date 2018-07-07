@@ -74,7 +74,7 @@ class OutputSpec extends FlatSpec {
       id = "v1", size = 4, startPosition = Point(3,5), candidateValues = Set("MALE","EARN","MOON","ATTR"))
 
     val crosswords = Crosswords(10, 10 , List(ph1, ph2))
-    crosswords.addIntersection(Intersection(PlaceholderCell(ph1.id,2), PlaceholderCell(ph2.id,1)))
+    crosswords.addIntersection(Intersection(from = (ph1.id,2), to = (ph2.id,1)))
     assert(crosswords.solveAllPossibilities.size == 3)
     val outputs = crosswords.solveAllPossibilities.map(_.render)
 

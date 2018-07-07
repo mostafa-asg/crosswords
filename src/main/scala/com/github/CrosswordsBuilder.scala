@@ -67,7 +67,7 @@ object CrosswordsBuilder {
     def getIntersection(ph1: Placeholder,
                         ph2: Placeholder,
                         indexes: (Option[Int],Option[Int])): Option[Intersection] = indexes match {
-      case (Some(index1),Some(index2)) => Some(Intersection(PlaceholderCell(ph1.id,index1), PlaceholderCell(ph2.id, index2)))
+      case (Some(index1),Some(index2)) => Some(Intersection(from = (ph1.id,index1), to = (ph2.id, index2)))
       case _ => None
     }
 
