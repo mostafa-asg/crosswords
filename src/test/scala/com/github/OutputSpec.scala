@@ -15,7 +15,7 @@ class OutputSpec extends FlatSpec {
 
     val crosswords = Crosswords(10, 10 , List(ph1, ph2))
 
-    val output = crosswords.render
+    val output = crosswords.stringRepresentation
 
     // expected output
     //++++++++++
@@ -46,7 +46,7 @@ class OutputSpec extends FlatSpec {
     val crosswords = Crosswords(10, 10 , List(ph1, ph2))
     assert(crosswords.solveAllPossibilities.size == 1)
 
-    val output = crosswords.solveAllPossibilities.head.render
+    val output = crosswords.solveAllPossibilities.head.stringRepresentation
 
     // expected output
     //++++++++++
@@ -76,7 +76,7 @@ class OutputSpec extends FlatSpec {
     val crosswords = Crosswords(10, 10 , List(ph1, ph2))
     crosswords.addIntersection(Intersection(from = (ph1.id,2), to = (ph2.id,1)))
     assert(crosswords.solveAllPossibilities.size == 3)
-    val outputs = crosswords.solveAllPossibilities.map(_.render)
+    val outputs = crosswords.solveAllPossibilities.map(_.stringRepresentation)
 
     // Expected output
     //++++++++++

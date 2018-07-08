@@ -84,7 +84,7 @@ case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
   /**
     * Draw the crosswords and returns representation as string
     */
-  val render: String = {
+  val stringRepresentation: String = {
 
     val table = Array.fill(rows,cols)('+')
 
