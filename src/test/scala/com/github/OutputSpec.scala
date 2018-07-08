@@ -71,7 +71,7 @@ class OutputSpec extends FlatSpec {
       id = "h1", size = 5, startPosition = Point(4,3), candidateValues = Set("TRACK","ACTOR"))
 
     val ph2 = Placeholder.vertical(
-      id = "v1", size = 4, startPosition = Point(3,5), candidateValues = Set("MALE","EARN","MOON","ATTR"))
+      id = "v1", size = 4, startPosition = Point(3,5), candidateValues = Set("MALE","EARN","MOON","ATOM"))
 
     val crosswords = Crosswords(10, 10 , List(ph1, ph2))
     crosswords.addIntersection(Intersection(from = (ph1.id,2), to = (ph2.id,1)))
@@ -106,8 +106,8 @@ class OutputSpec extends FlatSpec {
     //++++++++++
     //+++++A++++
     //+++ACTOR++
-    //+++++T++++
-    //+++++R++++
+    //+++++O++++
+    //+++++M++++
     //++++++++++
     //++++++++++
     //++++++++++
@@ -122,7 +122,7 @@ class OutputSpec extends FlatSpec {
 
     var actorAttrOutput = "++++++++++\n".times(3)
     actorAttrOutput += "+++++A++++\n+++ACTOR++\n"
-    actorAttrOutput += "+++++T++++\n" + "+++++R++++\n" + "++++++++++\n".times(3)
+    actorAttrOutput += "+++++O++++\n" + "+++++M++++\n" + "++++++++++\n".times(3)
 
     assert(outputs.contains(trackMaleOutput))
     assert(outputs.contains(trackEarnOutput))
