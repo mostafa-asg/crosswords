@@ -36,56 +36,24 @@ case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
 
   private def getPlaceholderById(id: String): Placeholder = placeholders.find( x => x.id.equals(id) ).get
 
-  /**
-    * Prune all placeholders candidate values
-    */
-  private lazy val pruneCandidateValues: List[Placeholder] = {
-    placeholders.map( placeholder => pruneCandidateValues(placeholder, getIntersectionsFor(placeholder.id)) )
-  }
 
   /**
-    * Prune candidate values for a given placeholder based on defined intersections for this placeholder
-    * It removes unnecessary candidate values that are impossible as a placeholder value
-    * @return new placeholder with prune candidate values
-    */
-  private def pruneCandidateValues(placeholder: Placeholder, intersections: List[Intersection]): Placeholder = {
-    var thisCandidateValues = placeholder.candidateValues
-
-    intersections.foreach { intersection =>
-      val otherCandidateValues = getPlaceholderById(intersection.to.placeholderId).candidateValues
-
-      val newSet = for {
-        w1 <- thisCandidateValues
-        w2 <- otherCandidateValues
-        newW = if (w1(intersection.from.index) == w2(intersection.to.index)) Some(w1) else None
-      } yield newW
-
-      thisCandidateValues = newSet.filter {
-        case None => false
-        case Some(_) => true
-      } map (someString => someString.get)
-    }
-
-    placeholder.copy(candidateValues = thisCandidateValues)
-  }
-
-  /**
-    * Solve all possible solutions and returns all solved crosswords
-    */
+   * Solve all possible solutions and returns all solved crosswords
+   */
   lazy val solveAllPossibilities: List[Crosswords] = {
 
-    val all = pruneCandidateValues.map(_.allPossibilities)
-    val result = new mutable.ListBuffer[Crosswords]
+    val all = placeholders.map(_.allPossibilities)
+    val solutions = new mutable.ListBuffer[Crosswords]
 
-    def move(i: Int, list: mutable.ListBuffer[Placeholder]): List[Placeholder] = {
+    def findSolutions(i: Int, list: mutable.ListBuffer[Placeholder]): List[Placeholder] = {
       if (i >= all.size)
         list.toList
       else {
         for (j <- all(i).indices) {
           list += all(i)(j)
-          val phs = move(i+1, list)
+          val phs = findSolutions(i+1, list)
           if (i == all.size-1 && phs.size == all.size && isValidSolution(phs)){
-            result += copy(placeholders = phs)
+            solutions += copy(placeholders = phs)
           }
           list -= all(i)(j)
         }
@@ -93,9 +61,9 @@ case class Crosswords(rows: Int, cols: Int, placeholders: List[Placeholder]) {
       }
     }
 
-    move(0, new mutable.ListBuffer[Placeholder])
+    findSolutions(0, new mutable.ListBuffer[Placeholder])
 
-    result.toList
+    solutions.toList
   }
 
   private def isValidSolution(placeholders: List[Placeholder]): Boolean ={
